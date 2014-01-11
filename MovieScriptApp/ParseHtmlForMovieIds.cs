@@ -65,7 +65,6 @@ namespace MovieScriptApp
         }
 
 
-
         private static void WriteOnlyUniqueStringsToFile(string fileName, List<string> movieIdsToWrite)
         {
             using (System.IO.StreamWriter file = new System.IO.StreamWriter(fileName))

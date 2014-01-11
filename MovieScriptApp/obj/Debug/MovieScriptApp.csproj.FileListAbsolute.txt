@@ -6,3 +6,5 @@ c:\users\prashmaya\documents\visual studio 2013\Projects\MovieScriptApp\MovieScr
 c:\users\prashmaya\documents\visual studio 2013\Projects\MovieScriptApp\MovieScriptApp\bin\Debug\EntityFramework.xml
 c:\users\prashmaya\documents\visual studio 2013\Projects\MovieScriptApp\MovieScriptApp\obj\Debug\MovieScriptApp.exe
 c:\users\prashmaya\documents\visual studio 2013\Projects\MovieScriptApp\MovieScriptApp\obj\Debug\MovieScriptApp.pdb
+c:\users\prashmaya\documents\visual studio 2013\Projects\MovieScriptApp\MovieScriptApp\bin\Debug\Newtonsoft.Json.dll
+c:\users\prashmaya\documents\visual studio 2013\Projects\MovieScriptApp\MovieScriptApp\bin\Debug\Newtonsoft.Json.xml

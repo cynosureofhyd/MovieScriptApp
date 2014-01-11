@@ -1,0 +1,178 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="MovieModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Country">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" />
+    <Property Name="CountryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Genre">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Movies" Relationship="Self.MovieGenre" FromRole="Genre" ToRole="Movie" />
+  </EntityType>
+  <EntityType Name="Movie">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int64" Nullable="false" />
+    <Property Name="Title" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="ReleaseDate" Type="DateTime" Precision="3" />
+    <Property Name="Director" Type="Int32" />
+    <Property Name="Language" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Producer" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="PlotSimple" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+    <Property Name="PlotDetailed" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="AKA" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="ImdbUrl" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="Runtime" Type="Int32" />
+    <Property Name="IMDBRating" Type="Decimal" Precision="18" Scale="0" />
+    <Property Name="Rated" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="ImdbID" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <Property Name="MovieType" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="MoviePersonRoles" Relationship="Self.fk_MoviePersonRole_Movie" FromRole="Movie" ToRole="MoviePersonRole" />
+    <NavigationProperty Name="PosterInfoes" Relationship="Self.fk_PosterInfo_Movie" FromRole="Movie" ToRole="PosterInfo" />
+    <NavigationProperty Name="Genres" Relationship="Self.MovieGenre" FromRole="Movie" ToRole="Genre" />
+  </EntityType>
+  <EntityType Name="MovieCountry">
+    <Key>
+      <PropertyRef Name="MovieId" />
+      <PropertyRef Name="CountryId" />
+    </Key>
+    <Property Name="MovieId" Type="Int64" Nullable="false" />
+    <Property Name="CountryId" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="MoviePersonRole">
+    <Key>
+      <PropertyRef Name="MovieId" />
+      <PropertyRef Name="PersonId" />
+      <PropertyRef Name="RoleId" />
+    </Key>
+    <Property Name="MovieId" Type="Int64" Nullable="false" />
+    <Property Name="PersonId" Type="Int64" Nullable="false" />
+    <Property Name="RoleId" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="Movie" Relationship="Self.fk_MoviePersonRole_Movie" FromRole="MoviePersonRole" ToRole="Movie" />
+    <NavigationProperty Name="Person" Relationship="Self.fk_MoviePersonRole_Person" FromRole="MoviePersonRole" ToRole="Person" />
+    <NavigationProperty Name="Role" Relationship="Self.fk_MoviePersonRole_Role" FromRole="MoviePersonRole" ToRole="Role" />
+  </EntityType>
+  <EntityType Name="Person">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FirstName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="MiddleName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="LastName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="Gender" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="DateOfBirth" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="MoviePersonRoles" Relationship="Self.fk_MoviePersonRole_Person" FromRole="Person" ToRole="MoviePersonRole" />
+  </EntityType>
+  <EntityType Name="PosterInfo">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Imdb" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+    <Property Name="Cover" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="MovieId" Type="Int64" Nullable="false" />
+    <Property Name="LocalPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Image" Type="Binary" MaxLength="Max" FixedLength="false" />
+    <Property Name="LocalFolderPath" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+    <Property Name="ImdbID" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Movie" Relationship="Self.fk_PosterInfo_Movie" FromRole="PosterInfo" ToRole="Movie" />
+  </EntityType>
+  <EntityType Name="Role">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="MoviePersonRoles" Relationship="Self.fk_MoviePersonRole_Role" FromRole="Role" ToRole="MoviePersonRole" />
+  </EntityType>
+  <Association Name="fk_MoviePersonRole_Movie">
+    <End Role="Movie" Type="Self.Movie" Multiplicity="1" />
+    <End Role="MoviePersonRole" Type="Self.MoviePersonRole" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Movie">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="MoviePersonRole">
+        <PropertyRef Name="MovieId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_PosterInfo_Movie">
+    <End Role="Movie" Type="Self.Movie" Multiplicity="1" />
+    <End Role="PosterInfo" Type="Self.PosterInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Movie">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="PosterInfo">
+        <PropertyRef Name="MovieId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_MoviePersonRole_Person">
+    <End Role="Person" Type="Self.Person" Multiplicity="1" />
+    <End Role="MoviePersonRole" Type="Self.MoviePersonRole" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Person">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="MoviePersonRole">
+        <PropertyRef Name="PersonId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_MoviePersonRole_Role">
+    <End Role="Role" Type="Self.Role" Multiplicity="1" />
+    <End Role="MoviePersonRole" Type="Self.MoviePersonRole" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Role">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="MoviePersonRole">
+        <PropertyRef Name="RoleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="MovieGenre">
+    <End Role="Genre" Type="Self.Genre" Multiplicity="*" />
+    <End Role="Movie" Type="Self.Movie" Multiplicity="*" />
+  </Association>
+  <EntityContainer Name="MovieEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Countries" EntityType="Self.Country" />
+    <EntitySet Name="Genres" EntityType="Self.Genre" />
+    <EntitySet Name="Movies" EntityType="Self.Movie" />
+    <EntitySet Name="MovieCountries" EntityType="Self.MovieCountry" />
+    <EntitySet Name="MoviePersonRoles" EntityType="Self.MoviePersonRole" />
+    <EntitySet Name="People" EntityType="Self.Person" />
+    <EntitySet Name="PosterInfoes" EntityType="Self.PosterInfo" />
+    <EntitySet Name="Roles" EntityType="Self.Role" />
+    <AssociationSet Name="fk_MoviePersonRole_Movie" Association="Self.fk_MoviePersonRole_Movie">
+      <End Role="Movie" EntitySet="Movies" />
+      <End Role="MoviePersonRole" EntitySet="MoviePersonRoles" />
+    </AssociationSet>
+    <AssociationSet Name="fk_PosterInfo_Movie" Association="Self.fk_PosterInfo_Movie">
+      <End Role="Movie" EntitySet="Movies" />
+      <End Role="PosterInfo" EntitySet="PosterInfoes" />
+    </AssociationSet>
+    <AssociationSet Name="fk_MoviePersonRole_Person" Association="Self.fk_MoviePersonRole_Person">
+      <End Role="Person" EntitySet="People" />
+      <End Role="MoviePersonRole" EntitySet="MoviePersonRoles" />
+    </AssociationSet>
+    <AssociationSet Name="fk_MoviePersonRole_Role" Association="Self.fk_MoviePersonRole_Role">
+      <End Role="Role" EntitySet="Roles" />
+      <End Role="MoviePersonRole" EntitySet="MoviePersonRoles" />
+    </AssociationSet>
+    <AssociationSet Name="MovieGenre" Association="Self.MovieGenre">
+      <End Role="Genre" EntitySet="Genres" />
+      <End Role="Movie" EntitySet="Movies" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

@@ -1,0 +1,201 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="MovieModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2005" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Country">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" Nullable="false" />
+    <Property Name="CountryName" Type="nvarchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Genre">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar" MaxLength="100" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Movie">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="bigint" Nullable="false" />
+    <Property Name="Title" Type="nvarchar" MaxLength="100" Nullable="false" />
+    <Property Name="ReleaseDate" Type="datetime" />
+    <Property Name="Director" Type="int" />
+    <Property Name="Language" Type="nvarchar" MaxLength="100" />
+    <Property Name="Producer" Type="nvarchar" MaxLength="100" />
+    <Property Name="PlotSimple" Type="nvarchar" MaxLength="4000" />
+    <Property Name="PlotDetailed" Type="nvarchar(max)" />
+    <Property Name="AKA" Type="nvarchar" MaxLength="100" />
+    <Property Name="ImdbUrl" Type="nvarchar" MaxLength="200" />
+    <Property Name="Runtime" Type="int" />
+    <Property Name="IMDBRating" Type="decimal" Precision="18" Scale="0" />
+    <Property Name="Rated" Type="nvarchar" MaxLength="10" />
+    <Property Name="ImdbID" Type="nvarchar" MaxLength="10" />
+    <Property Name="MovieType" Type="nvarchar" MaxLength="10" />
+  </EntityType>
+  <EntityType Name="MovieCountry">
+    <Key>
+      <PropertyRef Name="MovieId" />
+      <PropertyRef Name="CountryId" />
+    </Key>
+    <Property Name="MovieId" Type="bigint" Nullable="false" />
+    <Property Name="CountryId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="MovieGenre">
+    <Key>
+      <PropertyRef Name="MovieId" />
+      <PropertyRef Name="GenreId" />
+    </Key>
+    <Property Name="MovieId" Type="bigint" Nullable="false" />
+    <Property Name="GenreId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="MoviePersonRole">
+    <Key>
+      <PropertyRef Name="MovieId" />
+      <PropertyRef Name="PersonId" />
+      <PropertyRef Name="RoleId" />
+    </Key>
+    <Property Name="MovieId" Type="bigint" Nullable="false" />
+    <Property Name="PersonId" Type="bigint" Nullable="false" />
+    <Property Name="RoleId" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Person">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FirstName" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="MiddleName" Type="nvarchar" MaxLength="200" />
+    <Property Name="LastName" Type="nvarchar" MaxLength="200" />
+    <Property Name="Gender" Type="nvarchar" MaxLength="20" Nullable="false" />
+    <Property Name="DateOfBirth" Type="datetime" />
+  </EntityType>
+  <EntityType Name="PosterInfo">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Imdb" Type="nvarchar" MaxLength="4000" />
+    <Property Name="Cover" Type="nvarchar" MaxLength="4000" Nullable="false" />
+    <Property Name="MovieId" Type="bigint" Nullable="false" />
+    <Property Name="LocalPath" Type="nvarchar(max)" />
+    <Property Name="Image" Type="image" />
+    <Property Name="LocalFolderPath" Type="nvarchar" MaxLength="2000" />
+    <Property Name="ImdbID" Type="nvarchar" MaxLength="200" />
+  </EntityType>
+  <EntityType Name="Role">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Description" Type="nvarchar" MaxLength="100" Nullable="false" />
+  </EntityType>
+  <Association Name="fk_MovieGenre_Genre">
+    <End Role="Genre" Type="Self.Genre" Multiplicity="1" />
+    <End Role="MovieGenre" Type="Self.MovieGenre" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Genre">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="MovieGenre">
+        <PropertyRef Name="GenreId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_MovieGenre_Movie">
+    <End Role="Movie" Type="Self.Movie" Multiplicity="1" />
+    <End Role="MovieGenre" Type="Self.MovieGenre" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Movie">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="MovieGenre">
+        <PropertyRef Name="MovieId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_MoviePersonRole_Movie">
+    <End Role="Movie" Type="Self.Movie" Multiplicity="1" />
+    <End Role="MoviePersonRole" Type="Self.MoviePersonRole" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Movie">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="MoviePersonRole">
+        <PropertyRef Name="MovieId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_MoviePersonRole_Person">
+    <End Role="Person" Type="Self.Person" Multiplicity="1" />
+    <End Role="MoviePersonRole" Type="Self.MoviePersonRole" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Person">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="MoviePersonRole">
+        <PropertyRef Name="PersonId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_MoviePersonRole_Role">
+    <End Role="Role" Type="Self.Role" Multiplicity="1" />
+    <End Role="MoviePersonRole" Type="Self.MoviePersonRole" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Role">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="MoviePersonRole">
+        <PropertyRef Name="RoleId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_PosterInfo_Movie">
+    <End Role="Movie" Type="Self.Movie" Multiplicity="1" />
+    <End Role="PosterInfo" Type="Self.PosterInfo" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Movie">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="PosterInfo">
+        <PropertyRef Name="MovieId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="MovieModelStoreContainer">
+    <EntitySet Name="Country" EntityType="Self.Country" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Genre" EntityType="Self.Genre" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Movie" EntityType="Self.Movie" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MovieCountry" EntityType="Self.MovieCountry" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MovieGenre" EntityType="Self.MovieGenre" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="MoviePersonRole" EntityType="Self.MoviePersonRole" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Person" EntityType="Self.Person" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PosterInfo" EntityType="Self.PosterInfo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Role" EntityType="Self.Role" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="fk_MovieGenre_Genre" Association="Self.fk_MovieGenre_Genre">
+      <End Role="Genre" EntitySet="Genre" />
+      <End Role="MovieGenre" EntitySet="MovieGenre" />
+    </AssociationSet>
+    <AssociationSet Name="fk_MovieGenre_Movie" Association="Self.fk_MovieGenre_Movie">
+      <End Role="Movie" EntitySet="Movie" />
+      <End Role="MovieGenre" EntitySet="MovieGenre" />
+    </AssociationSet>
+    <AssociationSet Name="fk_MoviePersonRole_Movie" Association="Self.fk_MoviePersonRole_Movie">
+      <End Role="Movie" EntitySet="Movie" />
+      <End Role="MoviePersonRole" EntitySet="MoviePersonRole" />
+    </AssociationSet>
+    <AssociationSet Name="fk_MoviePersonRole_Person" Association="Self.fk_MoviePersonRole_Person">
+      <End Role="Person" EntitySet="Person" />
+      <End Role="MoviePersonRole" EntitySet="MoviePersonRole" />
+    </AssociationSet>
+    <AssociationSet Name="fk_MoviePersonRole_Role" Association="Self.fk_MoviePersonRole_Role">
+      <End Role="Role" EntitySet="Role" />
+      <End Role="MoviePersonRole" EntitySet="MoviePersonRole" />
+    </AssociationSet>
+    <AssociationSet Name="fk_PosterInfo_Movie" Association="Self.fk_PosterInfo_Movie">
+      <End Role="Movie" EntitySet="Movie" />
+      <End Role="PosterInfo" EntitySet="PosterInfo" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

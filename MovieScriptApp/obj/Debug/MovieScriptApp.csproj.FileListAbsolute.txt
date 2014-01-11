@@ -1,0 +1,8 @@
+c:\users\prashmaya\documents\visual studio 2013\Projects\MovieScriptApp\MovieScriptApp\bin\Debug\MovieScriptApp.exe.config
+c:\users\prashmaya\documents\visual studio 2013\Projects\MovieScriptApp\MovieScriptApp\obj\Debug\MovieScriptApp.csprojResolveAssemblyReference.cache
+c:\users\prashmaya\documents\visual studio 2013\Projects\MovieScriptApp\MovieScriptApp\bin\Debug\MovieScriptApp.exe
+c:\users\prashmaya\documents\visual studio 2013\Projects\MovieScriptApp\MovieScriptApp\bin\Debug\MovieScriptApp.pdb
+c:\users\prashmaya\documents\visual studio 2013\Projects\MovieScriptApp\MovieScriptApp\bin\Debug\EntityFramework.dll
+c:\users\prashmaya\documents\visual studio 2013\Projects\MovieScriptApp\MovieScriptApp\bin\Debug\EntityFramework.xml
+c:\users\prashmaya\documents\visual studio 2013\Projects\MovieScriptApp\MovieScriptApp\obj\Debug\MovieScriptApp.exe
+c:\users\prashmaya\documents\visual studio 2013\Projects\MovieScriptApp\MovieScriptApp\obj\Debug\MovieScriptApp.pdb

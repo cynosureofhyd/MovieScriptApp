@@ -12,15 +12,15 @@ namespace MovieScriptApp
     using System;
     using System.Collections.Generic;
     
-    public partial class Country
+    public partial class Language
     {
-        public Country()
+        public Language()
         {
             this.Movies = new HashSet<Movie>();
         }
     
         public int Id { get; set; }
-        public string CountryName { get; set; }
+        public string LanguageName { get; set; }
     
         public virtual ICollection<Movie> Movies { get; set; }
     }

@@ -33,5 +33,7 @@ namespace MovieScriptApp
         public DbSet<Person> People { get; set; }
         public DbSet<PosterInfo> PosterInfoes { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<Language> Languages { get; set; }
+        public DbSet<MovieLanguage> MovieLanguages { get; set; }
     }
 }

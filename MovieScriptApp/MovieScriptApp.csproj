@@ -58,13 +58,22 @@
       <DependentUpon>Movies.tt</DependentUpon>
     </Compile>
     <Compile Include="DownloadWebPageContent.cs" />
+    <Compile Include="EnumerateDirectory.cs" />
     <Compile Include="Genre.cs">
       <DependentUpon>Movies.tt</DependentUpon>
     </Compile>
+    <Compile Include="Language.cs">
+      <DependentUpon>Movies.tt</DependentUpon>
+    </Compile>
+    <Compile Include="LoadDataIntoDbFromTextFiles.cs" />
+    <Compile Include="Models\Poster.cs" />
     <Compile Include="Movie.cs">
       <DependentUpon>Movies.tt</DependentUpon>
     </Compile>
     <Compile Include="MovieCountry.cs">
+      <DependentUpon>Movies.tt</DependentUpon>
+    </Compile>
+    <Compile Include="MovieLanguage.cs">
       <DependentUpon>Movies.tt</DependentUpon>
     </Compile>
     <Compile Include="MoviePersonRole.cs">

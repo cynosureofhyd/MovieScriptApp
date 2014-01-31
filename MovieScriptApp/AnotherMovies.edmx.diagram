@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="54a9c2600f4242e8aee7543f76cb0a09" Name="Diagram1">
+        <EntityTypeShape EntityType="AnotherMovieModel.Country" Width="1.5" PointX="0.75" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="AnotherMovieModel.Genre" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="AnotherMovieModel.Language" Width="1.5" PointX="0.75" PointY="7.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="AnotherMovieModel.Movie" Width="1.5" PointX="3" PointY="2.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="AnotherMovieModel.MoviePersonRole" Width="1.5" PointX="5.25" PointY="2.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="AnotherMovieModel.Person" Width="1.5" PointX="3" PointY="8.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="AnotherMovieModel.PosterInfo" Width="1.5" PointX="5.25" PointY="6.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="AnotherMovieModel.Role" Width="1.5" PointX="3" PointY="12" IsExpanded="true" />
+        <AssociationConnector Association="AnotherMovieModel.fk_MoviePersonRole_Movie" ManuallyRouted="false" />
+        <AssociationConnector Association="AnotherMovieModel.fk_PosterInfo_Movie" ManuallyRouted="false" />
+        <AssociationConnector Association="AnotherMovieModel.fk_MoviePersonRole_Person" ManuallyRouted="false" />
+        <AssociationConnector Association="AnotherMovieModel.fk_MoviePersonRole_Role" ManuallyRouted="false" />
+        <AssociationConnector Association="AnotherMovieModel.MovieCountry" ManuallyRouted="false" />
+        <AssociationConnector Association="AnotherMovieModel.MovieGenre" ManuallyRouted="false" />
+        <AssociationConnector Association="AnotherMovieModel.MovieLanguage" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

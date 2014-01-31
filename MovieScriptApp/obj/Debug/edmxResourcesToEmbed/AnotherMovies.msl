@@ -1,0 +1,117 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="AnotherMovieModelStoreContainer" CdmEntityContainer="AnotherMovieEntities">
+    <EntitySetMapping Name="Countries">
+      <EntityTypeMapping TypeName="AnotherMovieModel.Country">
+        <MappingFragment StoreEntitySet="Country">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="CountryName" ColumnName="CountryName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Genres">
+      <EntityTypeMapping TypeName="AnotherMovieModel.Genre">
+        <MappingFragment StoreEntitySet="Genre">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Languages">
+      <EntityTypeMapping TypeName="AnotherMovieModel.Language">
+        <MappingFragment StoreEntitySet="Language">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="LanguageName" ColumnName="LanguageName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Movies">
+      <EntityTypeMapping TypeName="AnotherMovieModel.Movie">
+        <MappingFragment StoreEntitySet="Movie">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="ReleaseDate" ColumnName="ReleaseDate" />
+          <ScalarProperty Name="Director" ColumnName="Director" />
+          <ScalarProperty Name="Language" ColumnName="Language" />
+          <ScalarProperty Name="Producer" ColumnName="Producer" />
+          <ScalarProperty Name="PlotSimple" ColumnName="PlotSimple" />
+          <ScalarProperty Name="PlotDetailed" ColumnName="PlotDetailed" />
+          <ScalarProperty Name="AKA" ColumnName="AKA" />
+          <ScalarProperty Name="ImdbUrl" ColumnName="ImdbUrl" />
+          <ScalarProperty Name="Runtime" ColumnName="Runtime" />
+          <ScalarProperty Name="IMDBRating" ColumnName="IMDBRating" />
+          <ScalarProperty Name="Rated" ColumnName="Rated" />
+          <ScalarProperty Name="ImdbID" ColumnName="ImdbID" />
+          <ScalarProperty Name="MovieType" ColumnName="MovieType" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MoviePersonRoles">
+      <EntityTypeMapping TypeName="AnotherMovieModel.MoviePersonRole">
+        <MappingFragment StoreEntitySet="MoviePersonRole">
+          <ScalarProperty Name="MovieId" ColumnName="MovieId" />
+          <ScalarProperty Name="PersonId" ColumnName="PersonId" />
+          <ScalarProperty Name="RoleId" ColumnName="RoleId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="People">
+      <EntityTypeMapping TypeName="AnotherMovieModel.Person">
+        <MappingFragment StoreEntitySet="Person">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="MiddleName" ColumnName="MiddleName" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="Gender" ColumnName="Gender" />
+          <ScalarProperty Name="DateOfBirth" ColumnName="DateOfBirth" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PosterInfoes">
+      <EntityTypeMapping TypeName="AnotherMovieModel.PosterInfo">
+        <MappingFragment StoreEntitySet="PosterInfo">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Imdb" ColumnName="Imdb" />
+          <ScalarProperty Name="Cover" ColumnName="Cover" />
+          <ScalarProperty Name="MovieId" ColumnName="MovieId" />
+          <ScalarProperty Name="LocalPath" ColumnName="LocalPath" />
+          <ScalarProperty Name="Image" ColumnName="Image" />
+          <ScalarProperty Name="LocalFolderPath" ColumnName="LocalFolderPath" />
+          <ScalarProperty Name="ImdbID" ColumnName="ImdbID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Roles">
+      <EntityTypeMapping TypeName="AnotherMovieModel.Role">
+        <MappingFragment StoreEntitySet="Role">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="MovieCountry" TypeName="AnotherMovieModel.MovieCountry" StoreEntitySet="MovieCountry">
+      <EndProperty Name="Country">
+        <ScalarProperty Name="Id" ColumnName="CountryId" />
+      </EndProperty>
+      <EndProperty Name="Movie">
+        <ScalarProperty Name="ID" ColumnName="MovieId" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="MovieGenre" TypeName="AnotherMovieModel.MovieGenre" StoreEntitySet="MovieGenre">
+      <EndProperty Name="Genre">
+        <ScalarProperty Name="Id" ColumnName="GenreId" />
+      </EndProperty>
+      <EndProperty Name="Movie">
+        <ScalarProperty Name="ID" ColumnName="MovieId" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="MovieLanguage" TypeName="AnotherMovieModel.MovieLanguage" StoreEntitySet="MovieLanguage">
+      <EndProperty Name="Language">
+        <ScalarProperty Name="Id" ColumnName="LanguageId" />
+      </EndProperty>
+      <EndProperty Name="Movie">
+        <ScalarProperty Name="ID" ColumnName="MovieId" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping>

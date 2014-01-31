@@ -1,0 +1,4 @@
+2014-01-13 23:02:53,787 [1] DEBUG HibernatingRhinos.Profiler.Client.Host.ClientService [(null)] - Profiler initialized. Build: 2224
+2014-01-13 23:02:54,888 [1] INFO  HibernatingRhinos.Profiler.Client.Services.LicensingService [(null)] - Using floating license server: 
+2014-01-13 23:03:31,805 [1] DEBUG HibernatingRhinos.Profiler.Client.Host.ClientService [(null)] - Attempt to start HTTP listener
+2014-01-13 23:03:31,805 [1] DEBUG HibernatingRhinos.Profiler.Client.Host.ClientService [(null)] - HTTP listener started successfully

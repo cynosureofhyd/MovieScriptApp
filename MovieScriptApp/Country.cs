@@ -19,7 +19,7 @@ namespace MovieScriptApp
             this.Movies = new HashSet<Movie>();
         }
     
-        public int Id { get; set; }
+        public long ID { get; set; }
         public string CountryName { get; set; }
     
         public virtual ICollection<Movie> Movies { get; set; }

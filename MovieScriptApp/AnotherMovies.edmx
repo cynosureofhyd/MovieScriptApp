@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="MovieModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2005" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="AnotherMovieModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2005" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Country">
           <Key>
             <PropertyRef Name="Id" />
@@ -231,7 +231,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="MovieModelStoreContainer">
+        <EntityContainer Name="AnotherMovieModelStoreContainer">
           <EntitySet Name="Country" EntityType="Self.Country" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Genre" EntityType="Self.Genre" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Language" EntityType="Self.Language" Schema="dbo" store:Type="Tables" />
@@ -287,14 +287,14 @@
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="MovieModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="AnotherMovieModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="Country">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="CountryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <NavigationProperty Name="Movies" Relationship="MovieModel.MovieCountry1" FromRole="Country" ToRole="Movie" />
+          <NavigationProperty Name="Movies" Relationship="Self.MovieCountry" FromRole="Country" ToRole="Movie" />
         </EntityType>
         <EntityType Name="Genre">
           <Key>
@@ -303,6 +303,14 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Movies" Relationship="Self.MovieGenre" FromRole="Genre" ToRole="Movie" />
+        </EntityType>
+        <EntityType Name="Language">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LanguageName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Movies" Relationship="Self.MovieLanguage" FromRole="Language" ToRole="Movie" />
         </EntityType>
         <EntityType Name="Movie">
           <Key>
@@ -325,17 +333,9 @@
           <Property Name="MovieType" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="MoviePersonRoles" Relationship="Self.fk_MoviePersonRole_Movie" FromRole="Movie" ToRole="MoviePersonRole" />
           <NavigationProperty Name="PosterInfoes" Relationship="Self.fk_PosterInfo_Movie" FromRole="Movie" ToRole="PosterInfo" />
+          <NavigationProperty Name="Countries" Relationship="Self.MovieCountry" FromRole="Movie" ToRole="Country" />
           <NavigationProperty Name="Genres" Relationship="Self.MovieGenre" FromRole="Movie" ToRole="Genre" />
-          <NavigationProperty Name="Languages" Relationship="MovieModel.MovieLanguage1" FromRole="Movie" ToRole="Language" />
-          <NavigationProperty Name="Countries" Relationship="MovieModel.MovieCountry1" FromRole="Movie" ToRole="Country" />
-        </EntityType>
-        <EntityType Name="MovieCountry">
-          <Key>
-            <PropertyRef Name="MovieId" />
-            <PropertyRef Name="CountryId" />
-          </Key>
-          <Property Name="MovieId" Type="Int64" Nullable="false" />
-          <Property Name="CountryId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Languages" Relationship="Self.MovieLanguage" FromRole="Movie" ToRole="Language" />
         </EntityType>
         <EntityType Name="MoviePersonRole">
           <Key>
@@ -432,15 +432,23 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="MovieCountry">
+          <End Role="Country" Type="Self.Country" Multiplicity="*" />
+          <End Role="Movie" Type="Self.Movie" Multiplicity="*" />
+        </Association>
         <Association Name="MovieGenre">
           <End Role="Genre" Type="Self.Genre" Multiplicity="*" />
           <End Role="Movie" Type="Self.Movie" Multiplicity="*" />
         </Association>
-        <EntityContainer Name="MovieEntities" annotation:LazyLoadingEnabled="true">
+        <Association Name="MovieLanguage">
+          <End Role="Language" Type="Self.Language" Multiplicity="*" />
+          <End Role="Movie" Type="Self.Movie" Multiplicity="*" />
+        </Association>
+        <EntityContainer Name="AnotherMovieEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Countries" EntityType="Self.Country" />
           <EntitySet Name="Genres" EntityType="Self.Genre" />
+          <EntitySet Name="Languages" EntityType="Self.Language" />
           <EntitySet Name="Movies" EntityType="Self.Movie" />
-          <EntitySet Name="MovieCountries" EntityType="Self.MovieCountry" />
           <EntitySet Name="MoviePersonRoles" EntityType="Self.MoviePersonRole" />
           <EntitySet Name="People" EntityType="Self.Person" />
           <EntitySet Name="PosterInfoes" EntityType="Self.PosterInfo" />
@@ -461,53 +469,27 @@
             <End Role="Role" EntitySet="Roles" />
             <End Role="MoviePersonRole" EntitySet="MoviePersonRoles" />
           </AssociationSet>
+          <AssociationSet Name="MovieCountry" Association="Self.MovieCountry">
+            <End Role="Country" EntitySet="Countries" />
+            <End Role="Movie" EntitySet="Movies" />
+          </AssociationSet>
           <AssociationSet Name="MovieGenre" Association="Self.MovieGenre">
             <End Role="Genre" EntitySet="Genres" />
             <End Role="Movie" EntitySet="Movies" />
           </AssociationSet>
-          <EntitySet Name="Languages" EntityType="MovieModel.Language" />
-          <EntitySet Name="MovieLanguages" EntityType="MovieModel.MovieLanguage" />
-          <AssociationSet Name="MovieLanguage1" Association="MovieModel.MovieLanguage1">
+          <AssociationSet Name="MovieLanguage" Association="Self.MovieLanguage">
             <End Role="Language" EntitySet="Languages" />
             <End Role="Movie" EntitySet="Movies" />
           </AssociationSet>
-          <AssociationSet Name="MovieCountry1" Association="MovieModel.MovieCountry1">
-            <End Role="Country" EntitySet="Countries" />
-            <End Role="Movie" EntitySet="Movies" />
-          </AssociationSet>
         </EntityContainer>
-        <EntityType Name="Language">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="LanguageName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Movies" Relationship="MovieModel.MovieLanguage1" FromRole="Language" ToRole="Movie" />
-        </EntityType>
-        <EntityType Name="MovieLanguage">
-          <Key>
-            <PropertyRef Name="MovieId" />
-            <PropertyRef Name="LanguageId" />
-          </Key>
-          <Property Name="MovieId" Type="Int64" Nullable="false" />
-          <Property Name="LanguageId" Type="Int32" Nullable="false" />
-        </EntityType>
-        <Association Name="MovieLanguage1">
-          <End Type="MovieModel.Language" Role="Language" Multiplicity="*" />
-          <End Type="MovieModel.Movie" Role="Movie" Multiplicity="*" />
-        </Association>
-        <Association Name="MovieCountry1">
-          <End Type="MovieModel.Country" Role="Country" Multiplicity="*" />
-          <End Type="MovieModel.Movie" Role="Movie" Multiplicity="*" />
-        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="MovieModelStoreContainer" CdmEntityContainer="MovieEntities">
+        <EntityContainerMapping StorageEntityContainer="AnotherMovieModelStoreContainer" CdmEntityContainer="AnotherMovieEntities">
           <EntitySetMapping Name="Countries">
-            <EntityTypeMapping TypeName="MovieModel.Country">
+            <EntityTypeMapping TypeName="AnotherMovieModel.Country">
               <MappingFragment StoreEntitySet="Country">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="CountryName" ColumnName="CountryName" />
@@ -515,15 +497,23 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Genres">
-            <EntityTypeMapping TypeName="MovieModel.Genre">
+            <EntityTypeMapping TypeName="AnotherMovieModel.Genre">
               <MappingFragment StoreEntitySet="Genre">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="Languages">
+            <EntityTypeMapping TypeName="AnotherMovieModel.Language">
+              <MappingFragment StoreEntitySet="Language">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="LanguageName" ColumnName="LanguageName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Movies">
-            <EntityTypeMapping TypeName="MovieModel.Movie">
+            <EntityTypeMapping TypeName="AnotherMovieModel.Movie">
               <MappingFragment StoreEntitySet="Movie">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
@@ -543,16 +533,8 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="MovieCountries">
-            <EntityTypeMapping TypeName="MovieModel.MovieCountry">
-              <MappingFragment StoreEntitySet="MovieCountry">
-                <ScalarProperty Name="MovieId" ColumnName="MovieId" />
-                <ScalarProperty Name="CountryId" ColumnName="CountryId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="MoviePersonRoles">
-            <EntityTypeMapping TypeName="MovieModel.MoviePersonRole">
+            <EntityTypeMapping TypeName="AnotherMovieModel.MoviePersonRole">
               <MappingFragment StoreEntitySet="MoviePersonRole">
                 <ScalarProperty Name="MovieId" ColumnName="MovieId" />
                 <ScalarProperty Name="PersonId" ColumnName="PersonId" />
@@ -561,7 +543,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="People">
-            <EntityTypeMapping TypeName="MovieModel.Person">
+            <EntityTypeMapping TypeName="AnotherMovieModel.Person">
               <MappingFragment StoreEntitySet="Person">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />
@@ -573,7 +555,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="PosterInfoes">
-            <EntityTypeMapping TypeName="MovieModel.PosterInfo">
+            <EntityTypeMapping TypeName="AnotherMovieModel.PosterInfo">
               <MappingFragment StoreEntitySet="PosterInfo">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Imdb" ColumnName="Imdb" />
@@ -587,14 +569,22 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Roles">
-            <EntityTypeMapping TypeName="MovieModel.Role">
+            <EntityTypeMapping TypeName="AnotherMovieModel.Role">
               <MappingFragment StoreEntitySet="Role">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <AssociationSetMapping Name="MovieGenre" TypeName="MovieModel.MovieGenre" StoreEntitySet="MovieGenre">
+          <AssociationSetMapping Name="MovieCountry" TypeName="AnotherMovieModel.MovieCountry" StoreEntitySet="MovieCountry">
+            <EndProperty Name="Country">
+              <ScalarProperty Name="Id" ColumnName="CountryId" />
+            </EndProperty>
+            <EndProperty Name="Movie">
+              <ScalarProperty Name="ID" ColumnName="MovieId" />
+            </EndProperty>
+          </AssociationSetMapping>
+          <AssociationSetMapping Name="MovieGenre" TypeName="AnotherMovieModel.MovieGenre" StoreEntitySet="MovieGenre">
             <EndProperty Name="Genre">
               <ScalarProperty Name="Id" ColumnName="GenreId" />
             </EndProperty>
@@ -602,36 +592,12 @@
               <ScalarProperty Name="ID" ColumnName="MovieId" />
             </EndProperty>
           </AssociationSetMapping>
-          <EntitySetMapping Name="Languages">
-            <EntityTypeMapping TypeName="MovieModel.Language">
-              <MappingFragment StoreEntitySet="Language">
-                <ScalarProperty Name="LanguageName" ColumnName="LanguageName" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="MovieLanguages">
-            <EntityTypeMapping TypeName="MovieModel.MovieLanguage">
-              <MappingFragment StoreEntitySet="MovieLanguage">
-                <ScalarProperty Name="LanguageId" ColumnName="LanguageId" />
-                <ScalarProperty Name="MovieId" ColumnName="MovieId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <AssociationSetMapping Name="MovieLanguage1" TypeName="MovieModel.MovieLanguage1" StoreEntitySet="MovieLanguage">
-            <EndProperty Name="Movie">
-              <ScalarProperty Name="ID" ColumnName="MovieId" />
-            </EndProperty>
+          <AssociationSetMapping Name="MovieLanguage" TypeName="AnotherMovieModel.MovieLanguage" StoreEntitySet="MovieLanguage">
             <EndProperty Name="Language">
               <ScalarProperty Name="Id" ColumnName="LanguageId" />
             </EndProperty>
-          </AssociationSetMapping>
-          <AssociationSetMapping Name="MovieCountry1" TypeName="MovieModel.MovieCountry1" StoreEntitySet="MovieCountry">
             <EndProperty Name="Movie">
               <ScalarProperty Name="ID" ColumnName="MovieId" />
-            </EndProperty>
-            <EndProperty Name="Country">
-              <ScalarProperty Name="Id" ColumnName="CountryId" />
             </EndProperty>
           </AssociationSetMapping>
         </EntityContainerMapping>
@@ -650,7 +616,7 @@
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="true" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
-        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
       </DesignerInfoPropertySet>
     </Options>

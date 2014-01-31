@@ -16,7 +16,7 @@ namespace MovieScriptApp
     {
         public long MovieId { get; set; }
         public long PersonId { get; set; }
-        public int RoleId { get; set; }
+        public long RoleId { get; set; }
     
         public virtual Movie Movie { get; set; }
         public virtual Person Person { get; set; }

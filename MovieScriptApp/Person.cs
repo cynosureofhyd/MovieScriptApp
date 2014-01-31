@@ -19,12 +19,13 @@ namespace MovieScriptApp
             this.MoviePersonRoles = new HashSet<MoviePersonRole>();
         }
     
-        public long Id { get; set; }
+        public long ID { get; set; }
         public string FirstName { get; set; }
         public string MiddleName { get; set; }
         public string LastName { get; set; }
         public string Gender { get; set; }
         public Nullable<System.DateTime> DateOfBirth { get; set; }
+        public string FullName { get; set; }
     
         public virtual ICollection<MoviePersonRole> MoviePersonRoles { get; set; }
     }

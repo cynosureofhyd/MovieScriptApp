@@ -97,5 +97,37 @@
         <ScalarProperty Name="ID" ColumnName="MovieId" />
       </EndProperty>
     </AssociationSetMapping>
+    <EntitySetMapping Name="Languages">
+      <EntityTypeMapping TypeName="MovieModel.Language">
+        <MappingFragment StoreEntitySet="Language">
+          <ScalarProperty Name="LanguageName" ColumnName="LanguageName" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MovieLanguages">
+      <EntityTypeMapping TypeName="MovieModel.MovieLanguage">
+        <MappingFragment StoreEntitySet="MovieLanguage">
+          <ScalarProperty Name="LanguageId" ColumnName="LanguageId" />
+          <ScalarProperty Name="MovieId" ColumnName="MovieId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="MovieLanguage1" TypeName="MovieModel.MovieLanguage1" StoreEntitySet="MovieLanguage">
+      <EndProperty Name="Movie">
+        <ScalarProperty Name="ID" ColumnName="MovieId" />
+      </EndProperty>
+      <EndProperty Name="Language">
+        <ScalarProperty Name="Id" ColumnName="LanguageId" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="MovieCountry1" TypeName="MovieModel.MovieCountry1" StoreEntitySet="MovieCountry">
+      <EndProperty Name="Movie">
+        <ScalarProperty Name="ID" ColumnName="MovieId" />
+      </EndProperty>
+      <EndProperty Name="Country">
+        <ScalarProperty Name="Id" ColumnName="CountryId" />
+      </EndProperty>
+    </AssociationSetMapping>
   </EntityContainerMapping>
 </Mapping>

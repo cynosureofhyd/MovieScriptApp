@@ -16,5 +16,9 @@ namespace MovieScriptApp
     {
         public long MovieId { get; set; }
         public int LanguageId { get; set; }
+        public Nullable<bool> IsPrimary { get; set; }
+    
+        public virtual Language Language { get; set; }
+        public virtual Movie Movie { get; set; }
     }
 }

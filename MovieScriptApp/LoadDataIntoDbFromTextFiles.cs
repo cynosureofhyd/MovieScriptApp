@@ -48,18 +48,18 @@ namespace MovieScriptApp
         {
             try
             {
-                MovieEntities db = new MovieEntities();
+                MyMovieEntities db = new MyMovieEntities();
 
                 string imdbId = obj[0]["imdb_id"];
 
                 //if(!db.Movies.Select(m => m.ImdbID == imdbId).First())
-                if (db.Movies.Count() == 0 || !db.Movies.Select(m => m.ImdbID == imdbId).First())
+                //if (db.Movies.Count() > 0 || !db.Movies.Select(m => m.ImdbID == imdbId).First())
                 {
                     Int64 existingMovieId = 0;
                     if (db.Movies.Count() > 0)
                         existingMovieId = db.Movies.Count();
                     Movie movie = new Movie();
-                    movie.ID = existingMovieId + 1;
+                    //movie.ID = existingMovieId + 1;
                     movie.PlotDetailed = obj[0]["plot"] == null ? null : obj[0]["plot"]; ;
                     movie.ImdbID = obj[0]["imdb_id"] == null ? null : obj[0]["imdb_id"]; ;
                     movie.PlotSimple = obj[0]["plot_simple"] == null ? null : obj[0]["plot_simple"]; ;
@@ -74,8 +74,9 @@ namespace MovieScriptApp
                     if(releaseDate != null)
                         dtTime = new DateTime(Int32.Parse(releaseDate.ToString().Substring(0, 4)), Int32.Parse(releaseDate.ToString().Substring(4, 2)), Int32.Parse(releaseDate.ToString().Substring(6, 2)));
                     movie.ReleaseDate = dtTime;
-                    movie.Title = obj[0]["title"] == null ? null : obj[0]["title"]; ;
-                    Genres(obj, db);
+                    movie.Title = obj[0]["title"] == null ? null : obj[0]["title"];
+                    movie.RatingCount = obj[0]["rating_count"] == null ? null : obj[0]["rating_count"];
+                    Genres(obj, db, movie);
 
 
                     db.Movies.Add(movie);
@@ -108,22 +109,27 @@ namespace MovieScriptApp
             }
         }
 
-        private static void MovieLanguage(dynamic obj, MovieEntities db, IQueryable<Movie> savedMovie)
+        private static void MovieLanguage(dynamic obj, MyMovieEntities db, IQueryable<Movie> savedMovie)
         {
             if(obj[0]["language"]!= null)
             {
                 for(int i = 0; i < obj[0]["language"].Count; i++)
                 {
+                    string languageName = obj[0]["language"][i];
+                    var language = db.Languages.Select(l => l.Name == languageName);
                     
+                    //MovieLanguage movieLanguage = new MovieLanguage();
+                    //movieLanguage.MovieId = savedMovie.First().ID;
+                    //movieLanguage.LanguageId = language.
                 }
             }
             throw new NotImplementedException();
         }
 
-        public static void MoviePersonRole(dynamic obj, MovieEntities db)
+        public static void MoviePersonRole(dynamic obj, MyMovieEntities db, Movie movie)
         {
             string actorName = string.Empty;
-            var actor = db.Roles.Where(a => a.Description == "Actor");
+            var actorRole = db.Roles.Where(a => a.Description == "Actor").Distinct();
             
             for (int i = 0; i < obj[0]["actors"].Count; i++)
             {
@@ -137,12 +143,16 @@ namespace MovieScriptApp
                 person.FirstName = firstName;
                 person.MiddleName = ReturnMiddleName(actorName);
                 person.LastName = lastName;
-
+                person.FullName = actorName;
                 db.People.Add(person);
+
+                db.MoviePersonRoles.Add(new MoviePersonRole(){
+                    MovieId = movie.ID,
+                    RoleId = actorRole.Select(s => s.Description == "Actor")
+                })
+
                 db.SaveChanges();
                 var personId = db.People.Select(s => s == person).Distinct();
-                
-                
                 //per.FirstName = 
             }
         }
@@ -165,7 +175,7 @@ namespace MovieScriptApp
             return sb.ToString();
         }
 
-        public static void Genres(dynamic genres, MovieEntities db)
+        public static void Genres(dynamic genres, MyMovieEntities db, Movie movie)
         {
             Genre genre = new Genre();
 
@@ -177,7 +187,11 @@ namespace MovieScriptApp
                     genrename = genres[0]["genres"][i];
                     if (!String.IsNullOrWhiteSpace(genrename))
                     {
-                        var g = db.Genres.Where(gen => gen.Name == genrename).Distinct();
+                        string g = db.Genres.Where(gen => gen.Name == genrename).Distinct().ToString();
+                        movie.Genres.Add(new Genre()
+                            {
+                                Name = db.Genres.Where(gen => gen.Name == genrename).Distinct().ToString()
+                            });
                     }
                 }
             }
@@ -229,7 +243,7 @@ namespace MovieScriptApp
         {
             Role role = new Role();
             role.Description = "Director";
-            MovieEntities db = new MovieEntities();
+            MyMovieEntities db = new MyMovieEntities();
             db.Roles.Add(role);
             db.SaveChanges();
         }

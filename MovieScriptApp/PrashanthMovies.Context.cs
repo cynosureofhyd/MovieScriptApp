@@ -13,10 +13,10 @@ namespace MovieScriptApp
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class MovieEntities : DbContext
+    public partial class MyMovieEntities : DbContext
     {
-        public MovieEntities()
-            : base("name=MovieEntities")
+        public MyMovieEntities()
+            : base("name=MyMovieEntities")
         {
         }
     
@@ -27,13 +27,12 @@ namespace MovieScriptApp
     
         public DbSet<Country> Countries { get; set; }
         public DbSet<Genre> Genres { get; set; }
+        public DbSet<Language> Languages { get; set; }
         public DbSet<Movie> Movies { get; set; }
-        public DbSet<MovieCountry> MovieCountries { get; set; }
+        public DbSet<MovieLanguage> MovieLanguages { get; set; }
         public DbSet<MoviePersonRole> MoviePersonRoles { get; set; }
         public DbSet<Person> People { get; set; }
         public DbSet<PosterInfo> PosterInfoes { get; set; }
         public DbSet<Role> Roles { get; set; }
-        public DbSet<Language> Languages { get; set; }
-        public DbSet<MovieLanguage> MovieLanguages { get; set; }
     }
 }

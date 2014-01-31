@@ -10,7 +10,7 @@ namespace MovieScriptApp
     {
         public static void Parse(string html, string fileToWriteTo)
         {
-            MovieEntities db = new MovieEntities();
+            MyMovieEntities db = new MyMovieEntities();
             List<string> movieIds = new List<string>();
             for (int i = 0; i < html.Length; i++ )
             {

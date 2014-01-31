@@ -6,6 +6,7 @@
     </Key>
     <Property Name="Id" Type="Int32" Nullable="false" />
     <Property Name="CountryName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="Movies" Relationship="MovieModel.MovieCountry1" FromRole="Country" ToRole="Movie" />
   </EntityType>
   <EntityType Name="Genre">
     <Key>
@@ -37,6 +38,8 @@
     <NavigationProperty Name="MoviePersonRoles" Relationship="Self.fk_MoviePersonRole_Movie" FromRole="Movie" ToRole="MoviePersonRole" />
     <NavigationProperty Name="PosterInfoes" Relationship="Self.fk_PosterInfo_Movie" FromRole="Movie" ToRole="PosterInfo" />
     <NavigationProperty Name="Genres" Relationship="Self.MovieGenre" FromRole="Movie" ToRole="Genre" />
+    <NavigationProperty Name="Languages" Relationship="MovieModel.MovieLanguage1" FromRole="Movie" ToRole="Language" />
+    <NavigationProperty Name="Countries" Relationship="MovieModel.MovieCountry1" FromRole="Movie" ToRole="Country" />
   </EntityType>
   <EntityType Name="MovieCountry">
     <Key>
@@ -174,5 +177,39 @@
       <End Role="Genre" EntitySet="Genres" />
       <End Role="Movie" EntitySet="Movies" />
     </AssociationSet>
+    <EntitySet Name="Languages" EntityType="MovieModel.Language" />
+    <EntitySet Name="MovieLanguages" EntityType="MovieModel.MovieLanguage" />
+    <AssociationSet Name="MovieLanguage1" Association="MovieModel.MovieLanguage1">
+      <End Role="Language" EntitySet="Languages" />
+      <End Role="Movie" EntitySet="Movies" />
+    </AssociationSet>
+    <AssociationSet Name="MovieCountry1" Association="MovieModel.MovieCountry1">
+      <End Role="Country" EntitySet="Countries" />
+      <End Role="Movie" EntitySet="Movies" />
+    </AssociationSet>
   </EntityContainer>
+  <EntityType Name="Language">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="LanguageName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Movies" Relationship="MovieModel.MovieLanguage1" FromRole="Language" ToRole="Movie" />
+  </EntityType>
+  <EntityType Name="MovieLanguage">
+    <Key>
+      <PropertyRef Name="MovieId" />
+      <PropertyRef Name="LanguageId" />
+    </Key>
+    <Property Name="MovieId" Type="Int64" Nullable="false" />
+    <Property Name="LanguageId" Type="Int32" Nullable="false" />
+  </EntityType>
+  <Association Name="MovieLanguage1">
+    <End Type="MovieModel.Language" Role="Language" Multiplicity="*" />
+    <End Type="MovieModel.Movie" Role="Movie" Multiplicity="*" />
+  </Association>
+  <Association Name="MovieCountry1">
+    <End Type="MovieModel.Country" Role="Country" Multiplicity="*" />
+    <End Type="MovieModel.Movie" Role="Movie" Multiplicity="*" />
+  </Association>
 </Schema>

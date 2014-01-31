@@ -14,12 +14,11 @@ namespace MovieScriptApp
     
     public partial class PosterInfo
     {
-        public long Id { get; set; }
+        public long ID { get; set; }
         public string Imdb { get; set; }
         public string Cover { get; set; }
         public long MovieId { get; set; }
         public string LocalPath { get; set; }
-        public byte[] Image { get; set; }
         public string LocalFolderPath { get; set; }
         public string ImdbID { get; set; }
     

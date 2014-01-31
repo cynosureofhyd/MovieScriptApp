@@ -16,19 +16,15 @@ namespace MovieScriptApp
     {
         public Movie()
         {
+            this.MovieLanguages = new HashSet<MovieLanguage>();
             this.MoviePersonRoles = new HashSet<MoviePersonRole>();
-            this.PosterInfoes = new HashSet<PosterInfo>();
-            this.Genres = new HashSet<Genre>();
-            this.Languages = new HashSet<Language>();
             this.Countries = new HashSet<Country>();
+            this.Genres = new HashSet<Genre>();
         }
     
         public long ID { get; set; }
         public string Title { get; set; }
         public Nullable<System.DateTime> ReleaseDate { get; set; }
-        public Nullable<int> Director { get; set; }
-        public string Language { get; set; }
-        public string Producer { get; set; }
         public string PlotSimple { get; set; }
         public string PlotDetailed { get; set; }
         public string AKA { get; set; }
@@ -38,11 +34,12 @@ namespace MovieScriptApp
         public string Rated { get; set; }
         public string ImdbID { get; set; }
         public string MovieType { get; set; }
+        public Nullable<long> RatingCount { get; set; }
     
+        public virtual ICollection<MovieLanguage> MovieLanguages { get; set; }
         public virtual ICollection<MoviePersonRole> MoviePersonRoles { get; set; }
-        public virtual ICollection<PosterInfo> PosterInfoes { get; set; }
-        public virtual ICollection<Genre> Genres { get; set; }
-        public virtual ICollection<Language> Languages { get; set; }
+        public virtual PosterInfo PosterInfo { get; set; }
         public virtual ICollection<Country> Countries { get; set; }
+        public virtual ICollection<Genre> Genres { get; set; }
     }
 }

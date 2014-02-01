@@ -57,6 +57,7 @@
     <Compile Include="Country.cs">
       <DependentUpon>PrashanthMovies.tt</DependentUpon>
     </Compile>
+    <Compile Include="DownloadImagesToLocal.cs" />
     <Compile Include="DownloadWebPageContent.cs" />
     <Compile Include="EnumerateDirectory.cs" />
     <Compile Include="Genre.cs">
@@ -77,6 +78,9 @@
       <DependentUpon>PrashanthMovies.tt</DependentUpon>
     </Compile>
     <Compile Include="MyMovieApi.cs" />
+    <Compile Include="MyWebClient.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="ParseHtmlForMovieIds.cs" />
     <Compile Include="Person.cs">
       <DependentUpon>PrashanthMovies.tt</DependentUpon>

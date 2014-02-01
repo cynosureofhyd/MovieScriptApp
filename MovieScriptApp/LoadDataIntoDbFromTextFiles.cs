@@ -29,17 +29,6 @@ namespace MovieScriptApp
                 LoadDataIntoDb(obj, 0);
             }
 
-            //for (int i = 240; i < 2451; i++)
-            //{
-            //    inputpath = String.Format(inputfolder, i);
-            //    string text = System.IO.File.ReadAllText(@inputpath);
-            //    if (text.Length > 10)
-            //    {
-            //        dynamic obj = ConvertToObj(text);
-            //        LoadDataIntoDb(obj, i);
-            //    }
-            //}
-
             HashSet<string> keys = new HashSet<string>();
             string[] lines = System.IO.File.ReadAllLines(@inputpath);
         }
@@ -50,8 +39,8 @@ namespace MovieScriptApp
             try
             {
                 MyMovieEntities db = new MyMovieEntities();
-
                 string imdbId = obj[0]["imdb_id"];
+
                 //if (imdbId == "tt0025037")
                 //if(!db.Movies.Select(m => m.ImdbID == imdbId).First())
                 //if (db.Movies.Count() > 0 || !db.Movies.Select(m => m.ImdbID == imdbId).First())

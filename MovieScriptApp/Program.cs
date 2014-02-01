@@ -21,9 +21,9 @@ namespace MovieScriptApp
 
 
 
-            LoadDataIntoDbFromTextFiles.LoadData();
+            //LoadDataIntoDbFromTextFiles.LoadData();
 
-
+            DownloadImagesToLocal.Download();
 
             //for (int i = 400; i < 3200; )
             //{

@@ -41,9 +41,9 @@ namespace MovieScriptApp
                             //if (!Directory.Exists(serverPath))
                             //    Directory.CreateDirectory(serverPath);
                             if (!File.Exists(localFilenameImdb))
-                            client.DownloadFile((poster.Imdb), localFilenameImdb);
+                            client.DownloadFileAsync(new Uri(poster.Imdb), localFilenameImdb);
                             if (!File.Exists(localFilenameCover))
-                            client.DownloadFile((poster.Cover), localFilenameCover);
+                            client.DownloadFileAsync(new Uri(poster.Cover), localFilenameCover);
                             i++;
                             localFilenameImdb = @"C:\Users\PrashMaya\Pictures\MyMovieRecommendation\{0}.jpg";
                             //serverPath = @"C:\Users\PrashMaya\Pictures\{0}\";

@@ -16,13 +16,13 @@ namespace MovieScriptApp
         {
             //AddSampleRoleData();
 
-            string teluguMovieApis = @"C:\Users\PrashMaya\Documents\Movies\TeluguMovieMovieApi";
+            string englishMovieApis = @"C:\Users\PrashMaya\Documents\Movies\EnglishMovieMovieApi";
             string inputpath = "C:\\Users\\PrashMaya\\Desktop\\IMDBMovieTitleIds-0-2500.txt";
             string inputfolder = "C:\\Users\\PrashMaya\\My Documents\\First2500MoviesIMDB\\Movie{0}.txt";
             inputpath = String.Format(inputfolder, 1);
 
 
-            foreach (string file in Directory.EnumerateFiles(teluguMovieApis, "*.txt"))
+            foreach (string file in Directory.EnumerateFiles(englishMovieApis, "*.txt"))
             {
                     string text = File.ReadAllText(file);
                     dynamic obj = ConvertToObj(text);
@@ -46,18 +46,21 @@ namespace MovieScriptApp
 
         private static void LoadDataIntoDb(dynamic obj, int path)
         {
+            Movie savedMovie = null;
             try
             {
                 MyMovieEntities db = new MyMovieEntities();
 
                 string imdbId = obj[0]["imdb_id"];
-
+                //if (imdbId == "tt0022897")
                 //if(!db.Movies.Select(m => m.ImdbID == imdbId).First())
                 //if (db.Movies.Count() > 0 || !db.Movies.Select(m => m.ImdbID == imdbId).First())
                 {
                     string movieId =  obj[0]["imdb_id"];
                     Movie movie = new Movie();
-                    if(!db.Movies.Select(m => m.ImdbID == movieId).ToList<bool>().First())
+                    var testIfMovie = db.Movies.Where(mi => mi.ImdbID == movieId);
+                    //Movie containsMovie = db.Movies.Where(m => m.ImdbID == movieId).ToList<Movie>().First();
+                    if(testIfMovie.Count() == 0)
                     {
                         Int64 existingMovieId = 0;
                         if (db.Movies.Count() > 0)
@@ -67,29 +70,50 @@ namespace MovieScriptApp
                         movie.PlotDetailed = obj[0]["plot"] == null ? null : obj[0]["plot"]; ;
                         movie.ImdbID = obj[0]["imdb_id"] == null ? null : obj[0]["imdb_id"]; ;
                         movie.PlotSimple = obj[0]["plot_simple"] == null ? null : obj[0]["plot_simple"]; ;
-                        var tempruntime = obj[0]["runtime"] == null ? null : obj[0]["runtime"]; ;
-                        movie.Runtime = ConvertRuntime(tempruntime.ToString());
+                        var tempruntime = obj[0]["runtime"] == null ? null : obj[0]["runtime"]; 
+                        if(tempruntime != null)
+                            movie.Runtime = ConvertRuntime(tempruntime.ToString());
                         movie.Rated = obj[0]["rated"] == null ? null : obj[0]["rated"]; ;
-                        movie.ImdbUrl = obj[0]["imdb_url"] == null ? null : obj[0]["imdb_url"]; ;
-                        movie.AKA = obj[0]["also_known_as"][0] == null ? null : obj[0]["also_known_as"][0];
+                        movie.ImdbUrl = obj[0]["imdb_url"] == null ? null : obj[0]["imdb_url"];
+                        if (obj[0]["also_known_as"] != null)
+                            movie.AKA = obj[0]["also_known_as"][0] == null ? null : obj[0]["also_known_as"][0];
                         movie.IMDBRating = obj[0]["rating"] == null ? null : obj[0]["rating"];
                         Int64? releaseDate = obj[0]["release_date"] == null ? null : obj[0]["release_date"];
                         DateTime? dtTime = null;
                         if (releaseDate != null)
-                            dtTime = new DateTime(Int32.Parse(releaseDate.ToString().Substring(0, 4)), Int32.Parse(releaseDate.ToString().Substring(4, 2)), Int32.Parse(releaseDate.ToString().Substring(6, 2)));
+                        {
+                            int year = Int32.Parse(releaseDate.ToString().Substring(0, 4));
+                            if (year != 0)
+                            {
+                                int month = Int32.Parse(releaseDate.ToString().Substring(4, 2));
+                                if (month == 0)
+                                    month = 1;
+
+                                int day = Int32.Parse(releaseDate.ToString().Substring(6, 2));
+                                if (day == 0)
+                                    day = 1;
+                                dtTime = new DateTime(year, month, day);
+                            }
+                        }
                         movie.ReleaseDate = dtTime;
                         movie.Title = obj[0]["title"] == null ? null : obj[0]["title"];
                         movie.RatingCount = obj[0]["rating_count"] == null ? null : obj[0]["rating_count"];
+
+
+                        // If movie is not saved but genre is saved for some reason
+
+
                         Genres(obj, db, movie);
                         db.Movies.Add(movie);
                         db.SaveChanges();
                     }  
-                    Movie savedMovie = null;
+                    
                     if(movie.ImdbID != null)
                      savedMovie = db.Movies.Where(m => m.ImdbID == movie.ImdbID).ToList<Movie>().First();
                     else
                         savedMovie = db.Movies.Where(m => m.ImdbID == movieId).ToList<Movie>().First();
-                    if(savedMovie.MovieLanguages.Select(s => s.Language == null).ToList<bool>().First())
+                    
+                    if(savedMovie.MovieLanguages.Count() == 0 || savedMovie.MovieLanguages.Select(s => s.Language == null).ToList<bool>().First())
                         MovieLanguage(obj, db, savedMovie);
 
                     if(savedMovie.MoviePersonRoles.Count() == 0)
@@ -97,7 +121,7 @@ namespace MovieScriptApp
                                          
                     var ListOfGenre = obj[0]["genres"] == null ? null : obj[0]["genres"];
                     Poster poster = new Poster();
-                    if (obj[0]["poster"] != null && savedMovie.PosterInfo == null)
+                    if (obj[0]["poster"] != null && savedMovie.PosterInfoes.Count == 0)
                     {
                         poster.imdb = obj[0]["poster"]["imdb"] == null ? null : obj[0]["poster"]["imdb"];
                         poster.cover = obj[0]["poster"]["cover"] == null ? null : obj[0]["poster"]["cover"];
@@ -105,16 +129,23 @@ namespace MovieScriptApp
                         posterInfo.Imdb = poster.imdb;
                         posterInfo.Cover = poster.cover;
                         posterInfo.MovieId = savedMovie.ID;
+                        posterInfo.ImdbID = savedMovie.ImdbID;
+                        posterInfo.MovieId = savedMovie.ID;
                         db.PosterInfoes.Add(posterInfo);
+                        //db.PosterInfoes.Add(posterInfo);
                         db.SaveChanges();
                     }
                 }
             }
             catch (Exception ex)
             {
+                var testSavedMovie = savedMovie;
                 string inputfolder = "C:\\Users\\PrashMaya\\My Documents\\Exceptions\\Movie{0}.txt";
                 string inputfile = String.Format(inputfolder, path);
-                System.IO.File.WriteAllText(inputfile, ex.ToString());
+                StringBuilder textToWrite = new StringBuilder(savedMovie.ImdbID);
+                textToWrite.Append(ex.ToString());
+                System.IO.File.WriteAllText(inputfile, textToWrite.ToString());
+                
                 Console.WriteLine(ex.Message);
             }
         }
@@ -217,11 +248,20 @@ namespace MovieScriptApp
                     genrename = genres[0]["genres"][i];
                     if (!String.IsNullOrWhiteSpace(genrename))
                     {
-                        string g = db.Genres.Where(gen => gen.Name == genrename).Distinct().ToString();
-                        movie.Genres.Add(new Genre()
-                            {
-                                Name = db.Genres.Where(gen => gen.Name == genrename).Distinct().ToString()
-                            });
+                        if (db.Genres.Select(g => g.Name == genrename).ToList<bool>().First())
+                        {
+                            Genre alreadyExistsGenre = db.Genres.Where(g => g.Name == genrename).ToList<Genre>().First();
+                            movie.Genres.Add(alreadyExistsGenre);
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+                            movie.Genres.Add(new Genre()
+                                {
+                                    Name = genrename
+                                });
+                            db.SaveChanges();
+                        }
                     }
                 }
             }
@@ -234,6 +274,8 @@ namespace MovieScriptApp
             {
                 if (char.IsDigit(runtime[i]))
                     result += runtime[i];
+                if (result.Length == 3)
+                    break;
             }
             return Int32.Parse(result); ;
         }

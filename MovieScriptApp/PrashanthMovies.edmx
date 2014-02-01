@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="MyMovieModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2005" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="MyMovieModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2005" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Country">
           <Key>
             <PropertyRef Name="ID" />
@@ -96,11 +96,11 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MovieId" Type="bigint" Nullable="false" />
           <Property Name="Imdb" Type="nvarchar(max)" />
           <Property Name="Cover" Type="nvarchar(max)" />
-          <Property Name="MovieId" Type="bigint" Nullable="false" />
           <Property Name="LocalPath" Type="nvarchar(max)" />
-          <Property Name="LocalFolderPath" Type="nvarchar" MaxLength="2000" />
+          <Property Name="LocalFolderPath" Type="nvarchar(max)" />
           <Property Name="ImdbID" Type="nvarchar" MaxLength="200" />
         </EntityType>
         <EntityType Name="Role">
@@ -220,13 +220,13 @@
         </Association>
         <Association Name="FK_PosterInfo_Movie">
           <End Role="Movie" Type="Self.Movie" Multiplicity="1" />
-          <End Role="PosterInfo" Type="Self.PosterInfo" Multiplicity="0..1" />
+          <End Role="PosterInfo" Type="Self.PosterInfo" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Movie">
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="PosterInfo">
-              <PropertyRef Name="ID" />
+              <PropertyRef Name="MovieId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -283,7 +283,8 @@
             <End Role="PosterInfo" EntitySet="PosterInfo" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="MyMovieModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -327,12 +328,12 @@
           <Property Name="Rated" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ImdbID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="MovieType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="RatingCount" Type="Int64" />
           <NavigationProperty Name="MovieLanguages" Relationship="Self.FK_MovieLanguage_Movie" FromRole="Movie" ToRole="MovieLanguage" />
           <NavigationProperty Name="MoviePersonRoles" Relationship="Self.FK_MoviePersonRole_Movie" FromRole="Movie" ToRole="MoviePersonRole" />
-          <NavigationProperty Name="PosterInfo" Relationship="Self.FK_PosterInfo_Movie" FromRole="Movie" ToRole="PosterInfo" />
+          <NavigationProperty Name="PosterInfoes" Relationship="Self.FK_PosterInfo_Movie" FromRole="Movie" ToRole="PosterInfo" />
           <NavigationProperty Name="Countries" Relationship="Self.MovieCountry" FromRole="Movie" ToRole="Country" />
           <NavigationProperty Name="Genres" Relationship="Self.MovieGenre" FromRole="Movie" ToRole="Genre" />
-          <Property Name="RatingCount" Type="Int64" />
         </EntityType>
         <EntityType Name="MovieLanguage">
           <Key>
@@ -368,19 +369,19 @@
           <Property Name="LastName" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
           <Property Name="Gender" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="DateOfBirth" Type="DateTime" Precision="3" />
-          <NavigationProperty Name="MoviePersonRoles" Relationship="Self.FK_MoviePersonRole_Person" FromRole="Person" ToRole="MoviePersonRole" />
           <Property Name="FullName" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="MoviePersonRoles" Relationship="Self.FK_MoviePersonRole_Person" FromRole="Person" ToRole="MoviePersonRole" />
         </EntityType>
         <EntityType Name="PosterInfo">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MovieId" Type="Int64" Nullable="false" />
           <Property Name="Imdb" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Cover" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="MovieId" Type="Int64" Nullable="false" />
           <Property Name="LocalPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="LocalFolderPath" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="LocalFolderPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ImdbID" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Movie" Relationship="Self.FK_PosterInfo_Movie" FromRole="PosterInfo" ToRole="Movie" />
         </EntityType>
@@ -430,13 +431,13 @@
         </Association>
         <Association Name="FK_PosterInfo_Movie">
           <End Role="Movie" Type="Self.Movie" Multiplicity="1" />
-          <End Role="PosterInfo" Type="Self.PosterInfo" Multiplicity="0..1" />
+          <End Role="PosterInfo" Type="Self.PosterInfo" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="Movie">
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="PosterInfo">
-              <PropertyRef Name="ID" />
+              <PropertyRef Name="MovieId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -548,7 +549,6 @@
           <EntitySetMapping Name="Movies">
             <EntityTypeMapping TypeName="MyMovieModel.Movie">
               <MappingFragment StoreEntitySet="Movie">
-                <ScalarProperty Name="RatingCount" ColumnName="RatingCount" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Title" ColumnName="Title" />
                 <ScalarProperty Name="ReleaseDate" ColumnName="ReleaseDate" />
@@ -561,6 +561,7 @@
                 <ScalarProperty Name="Rated" ColumnName="Rated" />
                 <ScalarProperty Name="ImdbID" ColumnName="ImdbID" />
                 <ScalarProperty Name="MovieType" ColumnName="MovieType" />
+                <ScalarProperty Name="RatingCount" ColumnName="RatingCount" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -585,13 +586,13 @@
           <EntitySetMapping Name="People">
             <EntityTypeMapping TypeName="MyMovieModel.Person">
               <MappingFragment StoreEntitySet="Person">
-                <ScalarProperty Name="FullName" ColumnName="FullName" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="FirstName" ColumnName="FirstName" />
                 <ScalarProperty Name="MiddleName" ColumnName="MiddleName" />
                 <ScalarProperty Name="LastName" ColumnName="LastName" />
                 <ScalarProperty Name="Gender" ColumnName="Gender" />
                 <ScalarProperty Name="DateOfBirth" ColumnName="DateOfBirth" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -599,9 +600,9 @@
             <EntityTypeMapping TypeName="MyMovieModel.PosterInfo">
               <MappingFragment StoreEntitySet="PosterInfo">
                 <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="MovieId" ColumnName="MovieId" />
                 <ScalarProperty Name="Imdb" ColumnName="Imdb" />
                 <ScalarProperty Name="Cover" ColumnName="Cover" />
-                <ScalarProperty Name="MovieId" ColumnName="MovieId" />
                 <ScalarProperty Name="LocalPath" ColumnName="LocalPath" />
                 <ScalarProperty Name="LocalFolderPath" ColumnName="LocalFolderPath" />
                 <ScalarProperty Name="ImdbID" ColumnName="ImdbID" />

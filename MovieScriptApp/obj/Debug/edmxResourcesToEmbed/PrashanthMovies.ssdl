@@ -91,11 +91,11 @@
       <PropertyRef Name="ID" />
     </Key>
     <Property Name="ID" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MovieId" Type="bigint" Nullable="false" />
     <Property Name="Imdb" Type="nvarchar(max)" />
     <Property Name="Cover" Type="nvarchar(max)" />
-    <Property Name="MovieId" Type="bigint" Nullable="false" />
     <Property Name="LocalPath" Type="nvarchar(max)" />
-    <Property Name="LocalFolderPath" Type="nvarchar" MaxLength="2000" />
+    <Property Name="LocalFolderPath" Type="nvarchar(max)" />
     <Property Name="ImdbID" Type="nvarchar" MaxLength="200" />
   </EntityType>
   <EntityType Name="Role">
@@ -215,13 +215,13 @@
   </Association>
   <Association Name="FK_PosterInfo_Movie">
     <End Role="Movie" Type="Self.Movie" Multiplicity="1" />
-    <End Role="PosterInfo" Type="Self.PosterInfo" Multiplicity="0..1" />
+    <End Role="PosterInfo" Type="Self.PosterInfo" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Movie">
         <PropertyRef Name="ID" />
       </Principal>
       <Dependent Role="PosterInfo">
-        <PropertyRef Name="ID" />
+        <PropertyRef Name="MovieId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

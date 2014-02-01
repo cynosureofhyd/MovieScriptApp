@@ -1,3 +1,10 @@
 C:\Users\PrashMaya\Documents\Visual Studio 2013\Projects\MovieScriptApp\MovieScriptApp\bin\Debug\MovieScriptApp.exe
 C:\Users\PrashMaya\Documents\Visual Studio 2013\Projects\MovieScriptApp\MovieScriptApp\bin\Debug\EntityFramework.dll
 C:\Users\PrashMaya\Documents\Visual Studio 2013\Projects\MovieScriptApp\MovieScriptApp\bin\Debug\Newtonsoft.Json.dll
+C:\Users\PrashMaya\Documents\Visual Studio 2013\Projects\MovieScriptApp\MovieScriptApp\bin\Debug\MovieScriptApp.exe.config
+C:\Users\PrashMaya\Documents\Visual Studio 2013\Projects\MovieScriptApp\MovieScriptApp\bin\Debug\EntityFramework.xml
+C:\Users\PrashMaya\Documents\Visual Studio 2013\Projects\MovieScriptApp\MovieScriptApp\bin\Debug\Newtonsoft.Json.xml
+C:\Users\PrashMaya\Documents\Visual Studio 2013\Projects\MovieScriptApp\MovieScriptApp\obj\Debug\MovieScriptApp.exe
+C:\Users\PrashMaya\Documents\Visual Studio 2013\Projects\MovieScriptApp\MovieScriptApp\obj\Debug\MovieScriptApp.pdb
+C:\Users\PrashMaya\Documents\Visual Studio 2013\Projects\MovieScriptApp\MovieScriptApp\bin\Debug\MovieScriptApp.pdb
+C:\Users\PrashMaya\Documents\Visual Studio 2013\Projects\MovieScriptApp\MovieScriptApp\obj\Debug\MovieScriptApp.csprojResolveAssemblyReference.cache

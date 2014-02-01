@@ -18,6 +18,7 @@ namespace MovieScriptApp
         {
             this.MovieLanguages = new HashSet<MovieLanguage>();
             this.MoviePersonRoles = new HashSet<MoviePersonRole>();
+            this.PosterInfoes = new HashSet<PosterInfo>();
             this.Countries = new HashSet<Country>();
             this.Genres = new HashSet<Genre>();
         }
@@ -38,7 +39,7 @@ namespace MovieScriptApp
     
         public virtual ICollection<MovieLanguage> MovieLanguages { get; set; }
         public virtual ICollection<MoviePersonRole> MoviePersonRoles { get; set; }
-        public virtual PosterInfo PosterInfo { get; set; }
+        public virtual ICollection<PosterInfo> PosterInfoes { get; set; }
         public virtual ICollection<Country> Countries { get; set; }
         public virtual ICollection<Genre> Genres { get; set; }
     }

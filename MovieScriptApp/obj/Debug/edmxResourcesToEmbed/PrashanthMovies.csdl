@@ -40,12 +40,12 @@
     <Property Name="Rated" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="ImdbID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <Property Name="MovieType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="RatingCount" Type="Int64" />
     <NavigationProperty Name="MovieLanguages" Relationship="Self.FK_MovieLanguage_Movie" FromRole="Movie" ToRole="MovieLanguage" />
     <NavigationProperty Name="MoviePersonRoles" Relationship="Self.FK_MoviePersonRole_Movie" FromRole="Movie" ToRole="MoviePersonRole" />
-    <NavigationProperty Name="PosterInfo" Relationship="Self.FK_PosterInfo_Movie" FromRole="Movie" ToRole="PosterInfo" />
+    <NavigationProperty Name="PosterInfoes" Relationship="Self.FK_PosterInfo_Movie" FromRole="Movie" ToRole="PosterInfo" />
     <NavigationProperty Name="Countries" Relationship="Self.MovieCountry" FromRole="Movie" ToRole="Country" />
     <NavigationProperty Name="Genres" Relationship="Self.MovieGenre" FromRole="Movie" ToRole="Genre" />
-    <Property Name="RatingCount" Type="Int64" />
   </EntityType>
   <EntityType Name="MovieLanguage">
     <Key>
@@ -81,19 +81,19 @@
     <Property Name="LastName" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
     <Property Name="Gender" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="DateOfBirth" Type="DateTime" Precision="3" />
-    <NavigationProperty Name="MoviePersonRoles" Relationship="Self.FK_MoviePersonRole_Person" FromRole="Person" ToRole="MoviePersonRole" />
     <Property Name="FullName" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="MoviePersonRoles" Relationship="Self.FK_MoviePersonRole_Person" FromRole="Person" ToRole="MoviePersonRole" />
   </EntityType>
   <EntityType Name="PosterInfo">
     <Key>
       <PropertyRef Name="ID" />
     </Key>
     <Property Name="ID" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="MovieId" Type="Int64" Nullable="false" />
     <Property Name="Imdb" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="Cover" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="MovieId" Type="Int64" Nullable="false" />
     <Property Name="LocalPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <Property Name="LocalFolderPath" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+    <Property Name="LocalFolderPath" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="ImdbID" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="Movie" Relationship="Self.FK_PosterInfo_Movie" FromRole="PosterInfo" ToRole="Movie" />
   </EntityType>
@@ -143,13 +143,13 @@
   </Association>
   <Association Name="FK_PosterInfo_Movie">
     <End Role="Movie" Type="Self.Movie" Multiplicity="1" />
-    <End Role="PosterInfo" Type="Self.PosterInfo" Multiplicity="0..1" />
+    <End Role="PosterInfo" Type="Self.PosterInfo" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="Movie">
         <PropertyRef Name="ID" />
       </Principal>
       <Dependent Role="PosterInfo">
-        <PropertyRef Name="ID" />
+        <PropertyRef Name="MovieId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

@@ -16,7 +16,7 @@ namespace MovieScriptApp
         {
             //AddSampleRoleData();
 
-            string englishMovieApis = @"C:\Users\PrashMaya\Documents\Movies\EnglishMovieMovieApi";
+            string englishMovieApis = @"C:\Users\PrashMaya\Documents\Movies\HindiMovieMovieApi";
             string inputpath = "C:\\Users\\PrashMaya\\Desktop\\IMDBMovieTitleIds-0-2500.txt";
             string inputfolder = "C:\\Users\\PrashMaya\\My Documents\\First2500MoviesIMDB\\Movie{0}.txt";
             inputpath = String.Format(inputfolder, 1);
@@ -24,9 +24,9 @@ namespace MovieScriptApp
 
             foreach (string file in Directory.EnumerateFiles(englishMovieApis, "*.txt"))
             {
-                    string text = File.ReadAllText(file);
-                    dynamic obj = ConvertToObj(text);
-                    LoadDataIntoDb(obj, 0);
+                string text = File.ReadAllText(file);
+                dynamic obj = ConvertToObj(text);
+                LoadDataIntoDb(obj, 0);
             }
 
             //for (int i = 240; i < 2451; i++)
@@ -52,26 +52,26 @@ namespace MovieScriptApp
                 MyMovieEntities db = new MyMovieEntities();
 
                 string imdbId = obj[0]["imdb_id"];
-                //if (imdbId == "tt0022897")
+                //if (imdbId == "tt0025037")
                 //if(!db.Movies.Select(m => m.ImdbID == imdbId).First())
                 //if (db.Movies.Count() > 0 || !db.Movies.Select(m => m.ImdbID == imdbId).First())
                 {
-                    string movieId =  obj[0]["imdb_id"];
+                    string movieId = obj[0]["imdb_id"];
                     Movie movie = new Movie();
                     var testIfMovie = db.Movies.Where(mi => mi.ImdbID == movieId);
                     //Movie containsMovie = db.Movies.Where(m => m.ImdbID == movieId).ToList<Movie>().First();
-                    if(testIfMovie.Count() == 0)
+                    if (testIfMovie.Count() == 0)
                     {
                         Int64 existingMovieId = 0;
                         if (db.Movies.Count() > 0)
                             existingMovieId = db.Movies.Count();
-                        
+
                         //movie.ID = existingMovieId + 1;
                         movie.PlotDetailed = obj[0]["plot"] == null ? null : obj[0]["plot"]; ;
                         movie.ImdbID = obj[0]["imdb_id"] == null ? null : obj[0]["imdb_id"]; ;
                         movie.PlotSimple = obj[0]["plot_simple"] == null ? null : obj[0]["plot_simple"]; ;
-                        var tempruntime = obj[0]["runtime"] == null ? null : obj[0]["runtime"]; 
-                        if(tempruntime != null)
+                        var tempruntime = obj[0]["runtime"] == null ? null : obj[0]["runtime"];
+                        if (tempruntime != null)
                             movie.Runtime = ConvertRuntime(tempruntime.ToString());
                         movie.Rated = obj[0]["rated"] == null ? null : obj[0]["rated"]; ;
                         movie.ImdbUrl = obj[0]["imdb_url"] == null ? null : obj[0]["imdb_url"];
@@ -106,34 +106,36 @@ namespace MovieScriptApp
                         Genres(obj, db, movie);
                         db.Movies.Add(movie);
                         db.SaveChanges();
-                    }  
-                    
-                    if(movie.ImdbID != null)
-                     savedMovie = db.Movies.Where(m => m.ImdbID == movie.ImdbID).ToList<Movie>().First();
-                    else
-                        savedMovie = db.Movies.Where(m => m.ImdbID == movieId).ToList<Movie>().First();
-                    
-                    if(savedMovie.MovieLanguages.Count() == 0 || savedMovie.MovieLanguages.Select(s => s.Language == null).ToList<bool>().First())
-                        MovieLanguage(obj, db, savedMovie);
+                    }
 
-                    if(savedMovie.MoviePersonRoles.Count() == 0)
-                        MoviePersonRole(obj, db, savedMovie);
-                                         
-                    var ListOfGenre = obj[0]["genres"] == null ? null : obj[0]["genres"];
-                    Poster poster = new Poster();
-                    if (obj[0]["poster"] != null && savedMovie.PosterInfoes.Count == 0)
+                    if (movie.ImdbID != null)
+                        savedMovie = db.Movies.Where(m => m.ImdbID == movie.ImdbID).ToList<Movie>().Count() > 0 ? db.Movies.Where(m => m.ImdbID == movie.ImdbID).ToList<Movie>().First() : null;
+                    if (savedMovie != null)
                     {
-                        poster.imdb = obj[0]["poster"]["imdb"] == null ? null : obj[0]["poster"]["imdb"];
-                        poster.cover = obj[0]["poster"]["cover"] == null ? null : obj[0]["poster"]["cover"];
-                        PosterInfo posterInfo = new PosterInfo();
-                        posterInfo.Imdb = poster.imdb;
-                        posterInfo.Cover = poster.cover;
-                        posterInfo.MovieId = savedMovie.ID;
-                        posterInfo.ImdbID = savedMovie.ImdbID;
-                        posterInfo.MovieId = savedMovie.ID;
-                        db.PosterInfoes.Add(posterInfo);
-                        //db.PosterInfoes.Add(posterInfo);
-                        db.SaveChanges();
+                        savedMovie = db.Movies.Where(m => m.ImdbID == movieId).ToList<Movie>().First();
+
+                        if (savedMovie.MovieLanguages.Count() == 0 || savedMovie.MovieLanguages.Select(s => s.Language == null).ToList<bool>().First())
+                            MovieLanguage(obj, db, savedMovie);
+
+                        if (savedMovie.MoviePersonRoles.Count() == 0)
+                            MoviePersonRole(obj, db, savedMovie);
+
+                        var ListOfGenre = obj[0]["genres"] == null ? null : obj[0]["genres"];
+                        Poster poster = new Poster();
+                        if (obj[0]["poster"] != null && savedMovie.PosterInfoes.Count == 0)
+                        {
+                            poster.imdb = obj[0]["poster"]["imdb"] == null ? null : obj[0]["poster"]["imdb"];
+                            poster.cover = obj[0]["poster"]["cover"] == null ? null : obj[0]["poster"]["cover"];
+                            PosterInfo posterInfo = new PosterInfo();
+                            posterInfo.Imdb = poster.imdb;
+                            posterInfo.Cover = poster.cover;
+                            posterInfo.MovieId = savedMovie.ID;
+                            posterInfo.ImdbID = savedMovie.ImdbID;
+                            posterInfo.MovieId = savedMovie.ID;
+                            db.PosterInfoes.Add(posterInfo);
+                            //db.PosterInfoes.Add(posterInfo);
+                            db.SaveChanges();
+                        }
                     }
                 }
             }
@@ -141,24 +143,32 @@ namespace MovieScriptApp
             {
                 var testSavedMovie = savedMovie;
                 string inputfolder = "C:\\Users\\PrashMaya\\My Documents\\Exceptions\\Movie{0}.txt";
-                string inputfile = String.Format(inputfolder, path);
-                StringBuilder textToWrite = new StringBuilder(savedMovie.ImdbID);
+                var temp = savedMovie == null ? null : savedMovie.ImdbID;
+                string inputfile = String.Format(inputfolder, temp);
+                StringBuilder textToWrite = new StringBuilder(temp);
                 textToWrite.Append(ex.ToString());
                 System.IO.File.WriteAllText(inputfile, textToWrite.ToString());
-                
+
                 Console.WriteLine(ex.Message);
             }
         }
 
         private static void MovieLanguage(dynamic obj, MyMovieEntities db, Movie savedMovie)
         {
-            if(obj[0]["language"]!= null)
+            if (obj[0]["language"] != null)
             {
-                for(int i = 0; i < obj[0]["language"].Count; i++)
+                for (int i = 0; i < obj[0]["language"].Count; i++)
                 {
                     string languageName = obj[0]["language"][i];
                     var language = db.Languages.Where(l => l.Name == languageName).ToList<Language>();
-                    
+                    if (language.Count() == 0)
+                    {
+                        Language newlanguage = new Language();
+                        newlanguage.Name = languageName;
+                        db.Languages.Add(newlanguage);
+                        db.SaveChanges();
+                        language = db.Languages.Where(l => l.Name == languageName).ToList<Language>();
+                    }
                     MovieLanguage movieLanguage = new MovieLanguage();
                     movieLanguage.MovieId = savedMovie.ID;
                     movieLanguage.LanguageId = language.First().ID;
@@ -172,26 +182,35 @@ namespace MovieScriptApp
         {
             string actorName = string.Empty;
             List<Role> actorRole = db.Roles.Where(a => a.Description == "Actor").ToList<Role>();
-            
-            for (int i = 0; i < obj[0]["actors"].Count; i++)
+
+            if (obj[0]["actors"] != null)
             {
-                MoviePersonRole moviePersonRole = new MovieScriptApp.MoviePersonRole();
-                 actorName = obj[0]["actors"][i];
-                 AddPersons(obj, db, movie, actorName, moviePersonRole, actorRole);
+                for (int i = 0; i < obj[0]["actors"].Count; i++)
+                {
+                    MoviePersonRole moviePersonRole = new MovieScriptApp.MoviePersonRole();
+                    actorName = obj[0]["actors"][i];
+                    AddPersons(obj, db, movie, actorName, moviePersonRole, actorRole);
+                }
             }
-            for (int i = 0; i < obj[0]["writers"].Count; i++)
+            if (obj[0]["writers"] != null)
             {
-                actorRole = db.Roles.Where(a => a.Description == "Writer").ToList<Role>();
-                MoviePersonRole moviePersonRole = new MovieScriptApp.MoviePersonRole();
-                actorName = obj[0]["writers"][i];
-                AddPersons(obj, db, movie, actorName, moviePersonRole, actorRole);
+                for (int i = 0; i < obj[0]["writers"].Count; i++)
+                {
+                    actorRole = db.Roles.Where(a => a.Description == "Writer").ToList<Role>();
+                    MoviePersonRole moviePersonRole = new MovieScriptApp.MoviePersonRole();
+                    actorName = obj[0]["writers"][i];
+                    AddPersons(obj, db, movie, actorName, moviePersonRole, actorRole);
+                }
             }
-            for (int i = 0; i < obj[0]["directors"].Count; i++)
+            if (obj[0]["directors"] != null)
             {
-                actorRole = db.Roles.Where(a => a.Description == "Director").ToList<Role>();
-                MoviePersonRole moviePersonRole = new MovieScriptApp.MoviePersonRole();
-                actorName = obj[0]["directors"][i];
-                AddPersons(obj, db, movie, actorName, moviePersonRole, actorRole);
+                for (int i = 0; i < obj[0]["directors"].Count; i++)
+                {
+                    actorRole = db.Roles.Where(a => a.Description == "Director").ToList<Role>();
+                    MoviePersonRole moviePersonRole = new MovieScriptApp.MoviePersonRole();
+                    actorName = obj[0]["directors"][i];
+                    AddPersons(obj, db, movie, actorName, moviePersonRole, actorRole);
+                }
             }
         }
 
@@ -229,7 +248,7 @@ namespace MovieScriptApp
         {
             string[] words = name.Split(new char[0], StringSplitOptions.RemoveEmptyEntries);
             StringBuilder sb = new StringBuilder();
-            for(int i = 1; i < words.Count() -1; i++)
+            for (int i = 1; i < words.Count() - 1; i++)
             {
                 sb.Append(words[i]);
             }
